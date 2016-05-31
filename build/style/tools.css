@@ -1,0 +1,21 @@
+.hidden {
+	display: none;
+}
+
+.button {
+	display: block;
+	position: relative;
+	background-color: #ABCE59;
+	color: #ffffff;
+	top: 0;
+	border: 0;
+	padding: 1em 2em;
+	text-transform: uppercase;
+	box-shadow: 0 0.4em 0 0 #77903d;
+	text-align: center;
+}
+
+.button:active {
+	top: 0.4em;
+	box-shadow: 0 0 0 0 transparent;
+}

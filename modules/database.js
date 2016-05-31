@@ -2,6 +2,7 @@ var fs = require('fs');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// RadioFQ Schema
 var Radio = new Schema({
 	radio:		String,
 	mcc: 		Number,
@@ -16,7 +17,25 @@ var Radio = new Schema({
 	changeable:	Number,
 	created:	Date,
 	updated:	Date,
-	avgSignal:	Number,
+	averageSignal:	Number,
 });
 
-module.exports = mongoose.model('radio', Radio);
+// User Schema
+var Account = new Schema({
+	username:	String,
+	password:	String,
+	email:		String,
+	picture:	String,
+	admin:		Boolean,
+	created:	Date,
+	lastlog:	Date
+});
+
+Account.methods.validPassword = function(pwd) {
+    return (this.password === pwd);
+};
+
+module.exports = {
+	'Radio': mongoose.model('radio', Radio),
+	'Account': mongoose.model('account', Account)
+};

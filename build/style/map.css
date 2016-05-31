@@ -1,0 +1,71 @@
+#map {
+	padding: 0;
+	overflow: hidden;
+}
+
+.marker {
+	display: block;
+	border-radius: 50%;
+	background-color: #ABCE59;
+}
+
+/*
+.marker::after {
+	display: block;
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border: 0.0625em solid #ABCE59;
+	border-radius: 50%;
+	-webkit-animation-name: pulse;
+	animation-name: pulse;
+	-webkit-animation-direction: normal;
+	animation-direction: normal;
+	-webkit-animation-duration: 2s;
+	animation-duration: 2s;
+	-webkit-animation-delay: 1.5s;
+	animation-delay: 1.5s;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+*/
+
+.marker-counter {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	position: absolute;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	color: #010101;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+	background-color: #353535;
+}
+
+.leaflet-popup-content-wrapper {
+	border-radius: 0;
+}
+
+.leaflet-popup-content p {
+	color: #999999;
+}
+
+.leaflet-bottom {
+	display: none;
+}

@@ -1,0 +1,15 @@
+#line-graph .ct-area {
+	fill-opacity: 1;
+}
+
+.ct-series-a .ct-area, .ct-series-a .ct-slice-pie {
+	fill: #ABCE59;
+}
+
+.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+	stroke: #ABCE59;
+}
+
+.ct-label {
+	color: #5A5D53;
+}

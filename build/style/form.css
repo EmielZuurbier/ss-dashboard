@@ -1,0 +1,74 @@
+.admin form {
+	max-width: 30em;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 1 100%;
+	-ms-flex: 1 1 100%;
+	flex: 1 1 100%;
+}
+
+.admin form fieldset {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	border: 0;
+	color: #ffffff;
+}
+
+.admin form legend {
+	font-size: 2em;
+	margin-bottom: 1em;
+}
+
+.admin form input[type="text"], .admin form input[type="password"], .admin form input[type="email"] {
+	position: relative;
+	width: 100%;
+	padding: 0.5em 0;
+	font-size: 1em;
+	border: 0;
+	background-color: transparent;
+	border-bottom: 0.0625em solid #ffffff;
+	color: #ffffff;
+}
+
+
+.admin form input[type="text"]:focus, .admin form input[type="password"]:focus, .admin form input[type="email"]:focus {
+	border-color: #ABCE59;
+	outline: 0;
+}
+
+.admin form label {
+	position: absolute;
+	left: 0;
+	top: 0.5em;
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	color: #ABCE59;
+}
+
+.admin form input[type="text"]:focus ~ label, .admin form input[type="password"]:focus ~ label, .admin form input[type="email"]:focus ~ label, input.used ~ label {
+	top: -1.2em;
+	font-size: 0.8em;
+}
+
+.admin form input:-webkit-autofill {
+	background-color: transparent;
+	color: #ABCE59;
+}
+
+.admin form input[type="submit"], .admin form .submit {
+	background-color: #ABCE59;
+	color: #ffffff;
+	border: 0;
+	padding: 1em 2em;
+	text-transform: uppercase;
+	box-shadow: 0 0.4em 0 0 #77903d;
+}

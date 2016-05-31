@@ -1,15 +1,27 @@
-<section class="page active">
-	<header class="page-header">
-		<h2>Login or create an account</h2>
+<section class="admin">
+	<header class="admin-header">
+		<h2>Smartsensor Admin</h2>
+		<p>This is the administration page. To use the Smartsensor Dashboard, please login or create an account.</p>
 	</header>
-	<form>
+	{{#if auth}}
+	<div class="admin-user">
+		<h3>Welcome <span>{{user.username}}</span></h3>
+		<a href="/admin/logout" class="button">Logout</a>
+	</div>
+	{{else}}
+	<form class="admin-form" action="/admin/login" method="post">
 		<fieldset>
-			<legend>Login</legend>
-			<input type="text" name="username" id="username">
-			<label for="username">Username</label>
-			<input type="password" name="password" id="password">
-			<label for="password">Password</label>
-			<input type="submit" value="Login">
+			<legend>Login or <a href="/admin/register">create an account</a></legend>
+			<div class="admin-input-group">
+				<input type="text" name="username" id="username" required>
+				<label for="username">Username</label>
+			</div>
+			<div class="admin-input-group">
+				<input type="password" name="password" id="password" required>
+				<label for="password">Password</label>
+			</div>
+			<button type="submit" class="submit">Login</button>
 		</fieldset>
 	</form>
+	{{/if}}
 </section>
