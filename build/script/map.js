@@ -26,8 +26,11 @@ var maps = (function () {
 			radius: 25
 		}),
 		
+		tmobileLayer = L.layerGroup(),
+		
 		// Clustergroup
-		cluster = L.markerClusterGroup({
+		clusterOC = L.markerClusterGroup({
+			spiderfyOnMaxZoom: false,
 			polygonOptions: {
 				fillColor: '#ABCE59',
 				color: '#ABCE59',
@@ -47,11 +50,74 @@ var maps = (function () {
 			}
 		}),
 		
+		clusterUser = L.markerClusterGroup({
+//			disableClusteringAtZoom: 18,
+//			spiderfyOnMaxZoom: false,
+			polygonOptions: {
+				fillColor: '#f05b4f',
+				color: '#f05b4f',
+				weight: 2,
+				opacity: 1,
+				fillOpacity: 0.5
+			},
+			iconCreateFunction: function (cluster) {
+				var childCount = cluster.getChildCount();
+				
+				return L.divIcon({
+					html: '<span class="marker-counter">' + childCount + '</span>',
+					iconSize: [30, 30],
+					iconAnchor: [15, 15],
+					className: 'marker mobile'
+				});
+			}
+		}),
+		
+		clusterMoz = L.markerClusterGroup({
+			spiderfyOnMaxZoom: false,
+			polygonOptions: {
+				fillColor: '#4feaf0',
+				color: '#4feaf0',
+				weight: 2,
+				opacity: 1,
+				fillOpacity: 0.5
+			},
+			iconCreateFunction: function (cluster) {
+				var childCount = cluster.getChildCount();
+				
+				return L.divIcon({
+					html: '<span class="marker-counter">' + childCount + '</span>',
+					iconSize: [30, 30],
+					iconAnchor: [15, 15],
+					className: 'marker moz'
+				});
+			}
+		}),
+		
 		// Create user icon
-		icon = L.divIcon({
+		iconR = L.divIcon({
 			iconSize: [20, 20],
 			iconAnchor: [10, 10],
 			className: 'marker'
+		}),
+		
+		// Create user icon
+		iconM = L.divIcon({
+			iconSize: [20, 20],
+			iconAnchor: [10, 10],
+			className: 'marker mobile'
+		}),
+		
+		// Create user icon
+		iconMoz = L.divIcon({
+			iconSize: [20, 20],
+			iconAnchor: [10, 10],
+			className: 'marker moz'
+		}),
+		
+		iconTmobile = L.icon({
+			iconUrl: '../media/icons/tmobile.png',
+			iconSize: [50, 50],
+			iconAnchor: [25, 25]
 		}),
 	
 		// Create map
@@ -69,9 +135,13 @@ var maps = (function () {
 			maximumAge: 0
 		},
 		
-		 overlay = {
-			"Clusters": cluster,
-			"Heat": heat,
+		// Layer switches
+		overlay = {
+			"OpenCell data": clusterOC,
+			"Mozilla data": clusterMoz,
+			"User data": clusterUser,
+			"T-mobile": tmobileLayer,
+			"Heatmap": heat
 		};
 	
 	// Set tile layer
@@ -81,46 +151,67 @@ var maps = (function () {
 		accessToken: 'pk.eyJ1IjoibWlsb3NhdXJ1cyIsImEiOiJjaWc5N3I4bnAwOWJvdGFsdDIxZDZkYnE4In0.Ke7TOrRQQU0eBVRuv9YvZQ'
 	}).addTo(map);
 	
-	cluster.addTo(map);
+	clusterOC.addTo(map);
+	clusterUser.addTo(map);
+	clusterMoz.addTo(map);
+	tmobileLayer.addTo(map);
 	heat.addTo(map);
 
 	L.control.layers(null, overlay, {
 		position: 'topleft'
 	}).addTo(map);
-	
-	// Add markers to map
-	function addMarkers(data) {
 		
-		cluster.clearLayers();
+	// Add markers to map
+	function radioMarkers(data) {
+		
+		clusterOC.clearLayers();
 		
 		// Get json data for markers
 		data.forEach(function (loc) {
 			var marker = new L.marker(L.latLng(loc.lat, loc.lon), {
 				clickable: true,
-				icon: icon
-			}).bindPopup('<h3>Area: ' + loc.area + '</h3><p>Average signal: ' + (loc.averageSignal + loc.averageSignal * -2) + '<br>Radio: ' + loc.radio + '<br>Range: ' + loc.range + '<br>Area: ' + loc.area + '</p>');
+				icon: iconR
+			}).bindPopup('<p>Area: ' + loc.area + '<br>Average signal: ' + loc.averageSignal + '<br>Cell: ' + loc.cell + '<br>Changeable: ' + loc.changeable + '<br>Created: ' + loc.created + '<br>Lat: ' + loc.lat + '<br>Lon: ' + loc.lon + '<br>MCC: ' + loc.mcc + '<br>Net: ' + loc.net + '<br>Radio: ' + loc.radio + '<br>Range: ' + loc.range + '<br>Samples: ' + loc.samples + '<br>Unit: ' + loc.unit + '<br>Updated: ' + loc.updated + '</p>');
 			
-			cluster.addLayer(marker);
+			clusterOC.addLayer(marker);
+		});
+		
+	}
+	
+	// Add markers to map
+	function mozMarkers(data) {
+		
+		clusterMoz.clearLayers();
+		
+		// Get json data for markers
+		data.forEach(function (loc) {
+			var marker = new L.marker(L.latLng(loc.lat, loc.lon), {
+				clickable: true,
+				icon: iconMoz
+			}).bindPopup('<p>Area: ' + loc.area + '<br>Average signal: ' + loc.averageSignal + '<br>Cell: ' + loc.cell + '<br>Changeable: ' + loc.changeable + '<br>Created: ' + loc.created + '<br>Lat: ' + loc.lat + '<br>Lon: ' + loc.lon + '<br>MCC: ' + loc.mcc + '<br>Net: ' + loc.net + '<br>Radio: ' + loc.radio + '<br>Range: ' + loc.range + '<br>Samples: ' + loc.samples + '<br>Unit: ' + loc.unit + '<br>Updated: ' + loc.updated + '</p>');
+			
+			clusterMoz.addLayer(marker);
 		});
 		
 	}
 	
 	// Add markers from personal data
-	function addAppMarkers(data) {
+	function userMarkers(data) {
 		
-		cluster.clearLayers();
+		clusterUser.clearLayers();
 		
 		data.forEach(function (loc) {
 			
-			if (loc.gps_lat !== null && loc.gps_lng !== null) {
+			if (loc.lat !== null && loc.lng !== null) {
 				
-				var marker = new L.marker(L.latLng(loc.gps_lat, loc.gps_lng), {
+				var marker = new L.marker(L.latLng(loc.lat, loc.lng), {
 					clickable: true,
-					icon: icon
-				}).bindPopup('<p>Current time: ' + loc.current_time + '<br>Device name: ' + loc.device_name + '<br>Noise: ' + loc.noise + '<br>Lat: ' + loc.gps_lat + '<br>Lng: ' + loc.gps_lng + '<br>Cell DB: ' + loc.cell_db + '<br>Cell ASU: ' + loc.cell_asu + '<br>WLAN SSID: ' + loc.wlan_ssid + '<br>WLAN Signal: ' + loc.wlan_signal_strength + '<br>WLAN Encryption: ' + loc.wlan_encryption);
+					icon: iconM
+				}).bindPopup('<p>Current time: ' + loc.currentTime + '<br>Device name: ' + loc.deviceName + '<br>Noise: ' + loc.noise + '<br>Lat: ' + loc.lat + '<br>Lng: ' + loc.lng + '<br>Cell DB: ' + loc.cellDb + '<br>Cell ASU: ' + loc.cellAsu + '<br>WLAN SSID: ' + loc.wlanSsid + '<br>WLAN Signal: ' + loc.wlanStrength + '<br>WLAN Encryption: ' + loc.wlanEncryption);
 				
-				cluster.addLayer(marker);
+				clusterUser.addLayer(marker);
 			}
+			
 		});
 		
 	}
@@ -131,14 +222,29 @@ var maps = (function () {
 		heat.redraw();
 		
 		data.forEach(function (loc) {
-			if (loc.averageSignal !== "" && loc.averageSignal !== undefined && loc.averageSignal !== 0 && loc.averageSignal !== "0") {
+			
+//			if (loc.averageSignal !== "" && loc.averageSignal !== undefined && loc.averageSignal !== 0 && loc.averageSignal !== "0") {
 				var avg = loc.averageSignal + (loc.averageSignal * -2);
 				var perc = 1 / avg;
 				var inten = perc * 100;
 //				console.log('perc: ' + perc, 'inten: ' + inten);
 				heat.addLatLng([loc.lat, loc.lon, 1]);
-			}
+//			}
+			
 		});
+		
+	}
+	
+	function tmobileMarkers(data) {
+		
+		tmobileLayer.clearLayers();
+		
+		var marker = new L.Marker(L.latLng(52.3144, 4.942), {
+			clickable: true,
+			icon: iconTmobile
+		});
+		
+		tmobileLayer.addLayer(marker);
 		
 	}
 		
@@ -146,7 +252,7 @@ var maps = (function () {
 	function locate(result) {
 		
 		// Store coords
-		var coords = result.coords
+		var coords = result.coords;
 		
 		// Save data in maps object
 		maps.coords = {
@@ -160,6 +266,9 @@ var maps = (function () {
 		
 		// Move to location
 		map.setView([coords.latitude, coords.longitude], 10);
+		
+		// Set tmobile marker
+		maps.tmobileMarkers();
 				
 		// Save coordinates
 		localStorage.setItem('latitude', coords.latitude);
@@ -201,8 +310,10 @@ var maps = (function () {
 	return {
 		map: map,
 		position: getPosition,
-		addMarkers: addMarkers,
-		addAppMarkers: addAppMarkers,
+		radioMarkers: radioMarkers,
+		userMarkers: userMarkers,
+		mozMarkers: mozMarkers,
+		tmobileMarkers: tmobileMarkers,
 		addHeat: addHeat
 	};
 	

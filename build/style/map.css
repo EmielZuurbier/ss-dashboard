@@ -9,6 +9,15 @@
 	background-color: #ABCE59;
 }
 
+.marker.mobile {
+	background-color: #f05b4f;
+}
+
+.marker.moz {
+	background-color: #4feaf0;
+}
+
+
 /*
 .marker::after {
 	display: block;

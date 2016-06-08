@@ -14,9 +14,11 @@ var launcher = (function () {
 	// Start up socket
 	data.socketInit();
 	
+	// Request data from sources
+	data.http('http://localhost:3000/oc', 'OC');
+	data.http('http://localhost:3000/moz', 'Moz');
+	
 	// Get current postiton and render map
 	maps.position();
-	
-//	CSV.decode('./data/testdata.csv');
 	
 }());
