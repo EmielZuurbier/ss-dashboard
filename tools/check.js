@@ -21,3 +21,25 @@ Data.Radio.find({}, function(err, collections) {
 	  // object of all the users
 	  console.log(collections);
 });
+
+// Message to terminal
+console.log('Checking the collections of Data.Mobile');
+
+// Check collections in Data.Radio
+Data.User.find({}, function(err, collections) {
+	  if (err) throw err;
+
+	  // object of all the users
+	  console.log(collections);
+});
+
+// Message to terminal
+console.log('Checking the collections of Data.Moz');
+
+// Check collections in Data.Radio
+Data.Moz.find({}, function(err, collections) {
+	  if (err) throw err;
+
+	  // object of all the users
+	  console.log(collections);
+});
