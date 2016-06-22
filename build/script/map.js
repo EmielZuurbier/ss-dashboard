@@ -266,9 +266,6 @@ var maps = (function () {
 		
 		// Move to location
 		map.setView([coords.latitude, coords.longitude], 10);
-		
-		// Set tmobile marker
-		maps.tmobileMarkers();
 				
 		// Save coordinates
 		localStorage.setItem('latitude', coords.latitude);
