@@ -73,11 +73,15 @@ var data = (function (url) {
 			if (e.lengthComputable) {
 				progress.max = e.total;
 				progress.value = e.loaded;
-				if (e.total === e.loaded) {
-					loader.classList.add('hidden');
-				}
 			}
 		};
+		xhttp.onloadstart = function(e) {
+            progress.value = 0;
+        };
+        xhttp.onloadend = function(e) {
+            progress.value = e.loaded;
+            loader.classList.add('hidden');
+        };
 		xhttp.onreadystatechange = function () {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
        			var data = JSON.parse(xhttp.responseText);
