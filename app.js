@@ -38,20 +38,26 @@ db.once('open', function() {
 });
 
 
-//Data.Radio.find({}, function(err, collections) {
-//	  if (err) throw err;
-//
-//	  // object of all the users
-//	  console.log(collections);
-//});
-//
-//// get all the users
-//Data.Account.find({}, function(err, collections) {
-//	  if (err) throw err;
-//
-//	  // object of all the users
-//	  console.log(collections);
-//});
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://dashboard.smartsensors.me/oc');
+ 	res.setHeader('Access-Control-Allow-Origin', 'http://dashboard.smartsensors.me/moz');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 
 
 // view engine setup
@@ -79,29 +85,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Route for pages
 app.use('/', routes);
 app.use('/admin', admin);
-//app.post('/api', function (req, res, next) {
-//	console.log(req.body);
-//	io.on('connection', function (socket) {
-//		socket.on('bbq', function(data) {
-//            console.log(data);
-//            socket.emit(req.body);
-//        });
-//	});
-//	res.status(200).json({'message': 'Data received'});
-//});
-
 
 // Socket connection start
 io.on('connection', function (socket) {
-	
-	// Send data from MongoDB to client
-//	Data.Radio.find({}, function(err, collections) {
-//		if (err) throw err;
-////		var package = collections.filter(function (f) {
-////			return f.lat !== 'null' || f.lng !== 'null'
-////		});
-//		socket.emit('radio', collections);
-//	});
 	
 	Data.User.find({}, function(err, collections) {
 		if (err) throw err;
@@ -110,14 +96,6 @@ io.on('connection', function (socket) {
 		});
 		socket.emit('mobile', package);
 	});
-	
-//	Data.Moz.find({}, function(err, collections) {
-//		if (err) throw err;
-//		var package = collections.filter(function (f) {
-//			return f.lat !== 'null' || f.lng !== 'null'
-//		});
-//		socket.emit('moz', package);
-//	});
 
 	// Receive data from client
 	socket.on('geolocation', function (data) {
