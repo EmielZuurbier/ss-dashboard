@@ -109,6 +109,48 @@ if (args[1] === 'OC') {
 
 		});
 	});
+} else if (args[1] === 'User') {
+	// Open the file given in the argument
+	fs.readFile(args[0], 'utf-8', function (err, data) {
+		if (err) throw err;
+
+		// Parse JSON
+		var stringified = JSON.parse(data),
+			filtered = stringified.filter(function(item) {
+				return item.gps_lat !== "null";
+			});
+		
+		console.log(filtered);
+
+		// Add filtered array to database
+		filtered.forEach(function (item) {
+
+			// Create new collection
+			var collection = new Data.User({
+				currentTime: 	item.current_time,
+				deviceName: 	item.device_name,
+				noise:			item.noise,
+				lat:			item.gps_lat,
+				lng:			item.gps_lng,
+				accuracy:		item.gps_ccuracy,
+				cellDb:			item.cell_db,
+				cellAsu:		item.cell_asu,
+				wlanSsid:		item.wlan_ssid,
+				wlanStrength:	item.wlan_strength,
+				wlanEncryption:	item.wlan_encryption
+			});
+
+			// Save collection
+			collection.save(function (err) {
+				if (err) {
+					console.log('Database save error: ' + err);
+				} else {
+					console.log(collection + ' has been saved');
+				}
+			});
+
+		});
+	});
 } else {
 	console.log('Please give a second argument. Options are "OC" or "Moz"');
 }
